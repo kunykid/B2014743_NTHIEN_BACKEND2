@@ -11,27 +11,19 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 
+app.get('/', (req, res) => {
+    res.json({message: "Welcome to contact book application."});
+});
+
 //handle 404 response
 app.use((req, res, next) => {
-    //Code ở đây sẽ chạy khi không có route được định nghĩa nào
-    // khớp với yêu cầu. Gọi next() để chuyển sang middleware xử lý lỗi
     return next(new ApiError(404, "Resource not found"));
 });
 
-// define error-handling middleware last, after other app.use() and routes call
 app.use((err, req, res, next) => {
-    //Middle xu ly loi tap trung
-    //Trong cac doan code xu ly o cac route, goi next(error)
-    // se chuyen ve middleware xu ly loi nay
     return res.status(err.statusCode || 500).json({
         message: err.message || "Internal Server Error",
     });
-});
-
-
-
-app.get('/', (req, res) => {
-    res.json({message: "Welcome to contact book application."});
 });
 
 module.exports = app;
